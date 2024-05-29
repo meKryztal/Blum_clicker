@@ -4,8 +4,7 @@ import keyboard
 import random
 from pynput.mouse import Button, Controller
 import pygetwindow as gw
-import tkinter as tk
-from tkinter import simpledialog
+
 
 mouse = Controller()
 time.sleep(0.5)
@@ -16,37 +15,13 @@ def click(x, y):
     mouse.press(Button.left)
     mouse.release(Button.left)
 
-def choose_window_gui():
-    root = tk.Tk()
-    root.withdraw()  # Скрыть основное окно
 
-    windows = gw.getAllTitles()
-    if not windows:
-        return None
-
-    choice = simpledialog.askstring("Выбор окна Telegram", "Введите номер окна:\n" + "\n".join(f"{i}: {window}" for i, window in enumerate(windows)))
-
-    if choice is None or not choice.isdigit():
-        return None
-
-    choice = int(choice)
-    if 0 <= choice < len(windows):
-        return windows[choice]
-    else:
-        return None
-
-window_name = "TelegramDesktop"
-
-check = gw.getWindowsWithTitle(window_name)
+check = gw.getWindowsWithTitle("TelegramDesktop")
 if not check:
-    print(f"Окно - {window_name} не найдено!")
-    window_name = choose_window_gui()
-    if window_name:
-        print(f"Вы выбрали окно - {window_name}")
-    else:
-        print("Выбор окна отменен или неверный выбор.")
+    print(f"Окно BLUM не найдено!\nЗапустите Telegram и окно BLUM, после чего перезапустите бота!")
+
 else:
-    print(f"Окно найдено - {window_name}\nНажмите 'F1' для старта.")
+    print(f"Окно BLUM найдено\nНажмите 'F1' для старта.")
 
 telegram_window = check[0]
 paused = True
