@@ -1,5 +1,3 @@
-from pyautogui import *
-import pygetwindow as gw
 import pyautogui
 import time
 import keyboard
