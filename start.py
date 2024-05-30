@@ -16,6 +16,7 @@ def click(x, y):
     mouse.press(Button.left)
     mouse.release(Button.left)
 
+
 def choose_window_gui():
     root = tk.Tk()
     root.withdraw()  # Скрыть основное окно
@@ -35,17 +36,34 @@ def choose_window_gui():
     else:
         return None
 
-window_name = input('\nВведите название окна:\n1-TelegramDesktop\n2-Выбрать самому окно \n')
 
-if window_name == '1':
-    window_name = "TelegramDesktop"
-if window_name == '2':
-    window_name = choose_window_gui()
+def check_white_color(scrn, window_rect):
+    width, height = scrn.size
+    for x in range(0, width, 20):
+        y = height - height/8
+        r, g, b = scrn.getpixel((x, y))
+        if (r, g, b) == (255, 255, 255):
+            screen_x = window_rect[0] + x
+            screen_y = window_rect[1] + y
+            click(screen_x, screen_y)
+            print('Начинаю новую игру')
+            time.sleep(0.001)
+            return True
+    return False
+
+
+
+window_name = 'TelegramDesktop'
+
 
 check = gw.getWindowsWithTitle(window_name)
 if not check:
-    print(f"\nОкно BLUM не найдено!\nЗапустите Telegram и окно BLUM, после чего перезапустите бота!")
-
+    print(f"\nОкно BLUM не найдено!\nЗапустите Telegram и окно BLUM, после чего перезапустите бота!\nИли выберите окно сами\n")
+    window_name = choose_window_gui()
+    if window_name:
+        print(f"\nВы выбрали окно - {window_name}")
+    else:
+        print("\nВыбор окна отменен или неверный выбор.")
 else:
     print(f"\nОкно BLUM найдено\nНажмите 'S' для старта.")
 
@@ -78,17 +96,20 @@ while True:
 
     scrn = pyautogui.screenshot(region=(window_rect[0], window_rect[1], window_rect[2], window_rect[3]))
 
+    if check_white_color(scrn, window_rect):
+        continue
+
     width, height = scrn.size
     pixel_found = False
-    if pixel_found == True:
+    if pixel_found:
         break
 
     for x in range(0, width, 20):
         for y in range(0, height, 20):
             r, g, b = scrn.getpixel((x, y))
             if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(200, 255)):
-                screen_x = window_rect[0] + x
-                screen_y = window_rect[1] + y + 3
+                screen_x = window_rect[0] + x + 3
+                screen_y = window_rect[1] + y + 5
                 click(screen_x, screen_y)
                 time.sleep(0.001)
                 pixel_found = True
