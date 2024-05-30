@@ -10,16 +10,14 @@ from tkinter import simpledialog
 mouse = Controller()
 time.sleep(0.5)
 
-
 def click(x, y):
     mouse.position = (x, y + random.randint(1, 3))
     mouse.press(Button.left)
     mouse.release(Button.left)
 
-
 def choose_window_gui():
     root = tk.Tk()
-    root.withdraw()  # Скрыть основное окно
+    root.withdraw()
 
     windows = gw.getAllTitles()
     if not windows:
@@ -36,11 +34,10 @@ def choose_window_gui():
     else:
         return None
 
-
 def check_white_color(scrn, window_rect):
     width, height = scrn.size
     for x in range(0, width, 20):
-        y = height - height/8
+        y = height - height // 8
         r, g, b = scrn.getpixel((x, y))
         if (r, g, b) == (255, 255, 255):
             screen_x = window_rect[0] + x
@@ -51,24 +48,21 @@ def check_white_color(scrn, window_rect):
             return True
     return False
 
-
-
-window_name = 'TelegramDesktop'
-
-
+window_name = "TelegramDesktop"
 check = gw.getWindowsWithTitle(window_name)
-if not check:
-    print(f"\nОкно BLUM не найдено!\nЗапустите Telegram и окно BLUM, после чего перезапустите бота!\nИли выберите окно сами\n")
-    window_name = choose_window_gui()
-    if window_name:
-        print(f"\nВы выбрали окно - {window_name}")
-    else:
-        print("\nВыбор окна отменен или неверный выбор.")
-else:
-    print(f"\nОкно BLUM найдено\nНажмите 'S' для старта.")
 
-telegram_window = check[0]
+if not check:
+    print(f"\nОкно {window_name} не найдено!\nПожалуйста, выберите другое окно.")
+    window_name = choose_window_gui()
+
+if not window_name or not gw.getWindowsWithTitle(window_name):
+    print("\nНе удалось найти указанное окно!\nЗапустите Telegram, после чего перезапустите бота!")
+else:
+    print(f"\nОкно {window_name} найдено\nНажмите 'S' для старта.")
+
+telegram_window = gw.getWindowsWithTitle(window_name)[0]
 paused = True
+last_check_time = time.time()
 
 while True:
     if keyboard.is_pressed('S'):
@@ -96,12 +90,9 @@ while True:
 
     scrn = pyautogui.screenshot(region=(window_rect[0], window_rect[1], window_rect[2], window_rect[3]))
 
-    if check_white_color(scrn, window_rect):
-        continue
-
     width, height = scrn.size
     pixel_found = False
-    if pixel_found:
+    if pixel_found == True:
         break
 
     for x in range(0, width, 20):
@@ -111,8 +102,13 @@ while True:
                 screen_x = window_rect[0] + x + 3
                 screen_y = window_rect[1] + y + 5
                 click(screen_x, screen_y)
-                time.sleep(0.001)
+                time.sleep(0.01)
                 pixel_found = True
                 break
+
+    current_time = time.time()
+    if current_time - last_check_time >= 10:
+        if check_white_color(scrn, window_rect):
+            last_check_time = current_time
 
 print('Стоп')
