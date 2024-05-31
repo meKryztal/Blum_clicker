@@ -102,7 +102,7 @@ while True:
                 screen_x = window_rect[0] + x + 3
                 screen_y = window_rect[1] + y + 5
                 click(screen_x, screen_y)
-                time.sleep(0.01)
+                time.sleep(0.002)
                 pixel_found = True
                 break
 
