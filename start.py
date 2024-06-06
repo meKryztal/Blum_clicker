@@ -10,10 +10,12 @@ from tkinter import simpledialog
 mouse = Controller()
 time.sleep(0.5)
 
-def click(x, y):
-    mouse.position = (x, y + random.randint(1, 3))
+
+def click(xs, ys):
+    mouse.position = (xs, ys + random.randint(1, 3))
     mouse.press(Button.left)
     mouse.release(Button.left)
+
 
 def choose_window_gui():
     root = tk.Tk()
@@ -23,7 +25,8 @@ def choose_window_gui():
     if not windows:
         return None
 
-    choice = simpledialog.askstring("Выбор окна Telegram", "Введите номер окна:\n" + "\n".join(f"{i}: {window}" for i, window in enumerate(windows)))
+    choice = simpledialog.askstring("Выбор окна Telegram", "Введите номер окна:\n" + "\n".join(
+        f"{i}: {window}" for i, window in enumerate(windows)))
 
     if choice is None or not choice.isdigit():
         return None
@@ -34,19 +37,21 @@ def choose_window_gui():
     else:
         return None
 
-def check_white_color(scrn, window_rect):
-    width, height = scrn.size
-    for x in range(0, width, 20):
-        y = height - height // 8
-        r, g, b = scrn.getpixel((x, y))
-        if (r, g, b) == (255, 255, 255):
-            screen_x = window_rect[0] + x
-            screen_y = window_rect[1] + y
-            click(screen_x, screen_y)
+
+def check_white_color(scrnb, window_rectb):
+    widthb, heightb = scrnb.size
+    for xb in range(0, widthb, 20):
+        yb = heightb - heightb / 7
+        rb, gb, bb = scrnb.getpixel((xb, yb))
+        if (rb, gb, bb) == (255, 255, 255):
+            screen_xb = window_rectb[0] + xb
+            screen_yb = window_rectb[1] + yb
+            click(screen_xb, screen_yb)
             print('Начинаю новую игру')
             time.sleep(0.001)
             return True
     return False
+
 
 window_name = "TelegramDesktop"
 check = gw.getWindowsWithTitle(window_name)
@@ -63,6 +68,7 @@ else:
 telegram_window = gw.getWindowsWithTitle(window_name)[0]
 paused = True
 last_check_time = time.time()
+last_blue_check_time = time.time()
 
 while True:
     if keyboard.is_pressed('S'):
@@ -92,15 +98,13 @@ while True:
 
     width, height = scrn.size
     pixel_found = False
-    if pixel_found == True:
-        break
 
     for x in range(0, width, 20):
-        for y in range(0, height, 20):
+        for y in range(130, height, 20):
             r, g, b = scrn.getpixel((x, y))
             if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(200, 255)):
                 screen_x = window_rect[0] + x + 3
-                screen_y = window_rect[1] + y + 5
+                screen_y = window_rect[1] + y + 3
                 click(screen_x, screen_y)
                 time.sleep(0.002)
                 pixel_found = True
@@ -110,5 +114,6 @@ while True:
     if current_time - last_check_time >= 10:
         if check_white_color(scrn, window_rect):
             last_check_time = current_time
+
 
 print('Стоп')
