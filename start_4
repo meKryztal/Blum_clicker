@@ -10,10 +10,12 @@ from tkinter import simpledialog
 mouse = Controller()
 time.sleep(0.5)
 
+
 def click(xs, ys):
     mouse.position = (xs, ys + random.randint(1, 3))
     mouse.press(Button.left)
     mouse.release(Button.left)
+
 
 def choose_window_gui():
     root = tk.Tk()
@@ -34,6 +36,7 @@ def choose_window_gui():
         return windows[choice]
     else:
         return None
+
 
 def check_white_color(scrnb, window_rectb):
     widthb, heightb = scrnb.size
@@ -61,6 +64,7 @@ def check_blue_color(scrnq, window_rectq):
                 click(screen_xq, screen_yq)
                 return True
     return False
+
 
 window_name = "TelegramDesktop"
 check = gw.getWindowsWithTitle(window_name)
