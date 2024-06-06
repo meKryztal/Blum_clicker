@@ -104,7 +104,7 @@ while True:
             r, g, b = scrn.getpixel((x, y))
             if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(200, 255)):
                 screen_x = window_rect[0] + x + 3
-                screen_y = window_rect[1] + y + 3
+                screen_y = window_rect[1] + y + 5
                 click(screen_x, screen_y)
                 time.sleep(0.002)
                 pixel_found = True
