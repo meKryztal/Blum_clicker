@@ -40,17 +40,17 @@ def choose_window_gui():
 
 def check_white_color(scrnb, window_rectb):
     widthb, heightb = scrnb.size
-    for xb in range(0, widthb, 20):
-        yb = heightb - heightb / 7
-        rb, gb, bb = scrnb.getpixel((xb, yb))
-        if (rb, gb, bb) == (255, 255, 255):
-            screen_xb = window_rectb[0] + xb
-            screen_yb = window_rectb[1] + yb
-            click(screen_xb, screen_yb)
-            print('Начинаю новую игру')
-            time.sleep(0.001)
-            return True
-    return False
+    for xb in range(340, widthb, 30):
+        for yb in range(580, heightb, 20):
+            rb, gb, bb = scrnb.getpixel((xb, yb))
+            if (rb, gb, bb) == (255, 255, 255):
+                screen_xb = window_rectb[0] + xb
+                screen_yb = window_rectb[1] + yb
+                pyautogui.moveTo(screen_xb, screen_yb)
+                print('Начинаю новую игру')
+                time.sleep(0.001)
+                return True
+        return False
 
 
 def check_blue_color(scrnq, window_rectq):
