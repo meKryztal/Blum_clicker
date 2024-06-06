@@ -115,5 +115,4 @@ while True:
         if check_white_color(scrn, window_rect):
             last_check_time = current_time
 
-
 print('Стоп')
