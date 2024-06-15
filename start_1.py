@@ -58,7 +58,7 @@ def check_blue_color(scrnq, window_rectq):
     for xq in range(0, widthq, 20):
         for yq in range(200, heightq, 20):
             rq, gq, bq = scrnq.getpixel((xq, yq))
-            if (rq in range(0, 150)) and (gq in range(102, 220)) and (bq in range(200, 255)):
+            if (rq in range(5, 150)) and (gq in range(102, 220)) and (bq in range(200, 245)):
                 screen_xq = window_rectq[0] + xq
                 screen_yq = window_rectq[1] + yq
                 click(screen_xq, screen_yq)
@@ -116,7 +116,7 @@ while True:
     for x in range(0, width, 20):
         for y in range(130, height, 20):
             r, g, b = scrn.getpixel((x, y))
-            if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(200, 255)):
+            if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(200, 245)):
                 screen_x = window_rect[0] + x + 3
                 screen_y = window_rect[1] + y + 5
                 click(screen_x, screen_y)
