@@ -1,52 +1,23 @@
 import pyautogui
-import cv2
-import numpy as np
-import concurrent.futures
 import time
 import keyboard
+import random
 from pynput.mouse import Button, Controller
 import pygetwindow as gw
 import tkinter as tk
 from tkinter import simpledialog
+from PIL import Image, ImageEnhance, ImageTk
+import cv2
+import numpy as np
 
 mouse = Controller()
-
-
-def get_window(window):
-    windows = pyautogui.getWindowsWithTitle(window)
-    if windows:
-        window = windows[0]
-        region_left = window.left
-        region_top = window.top + 150
-        region_width = window.width
-        region_height = window.height - 150
-        return region_left, region_top, region_width, region_height
-    else:
-        raise Exception(f"Окно '{window}' не найдено.")
-
-
-star_templates_10s = [
-    ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
-]
-
-# Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
-star_templates_5s = [
-    ('4', cv2.imread('4.png', cv2.IMREAD_COLOR)),
-    ('5', cv2.imread('5.png', cv2.IMREAD_COLOR)),
-]
-
-star_templates = [
-    ('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),
-    ('2', cv2.imread('2.png', cv2.IMREAD_COLOR)),
-    ('3', cv2.imread('3.png', cv2.IMREAD_COLOR)),
-]
+time.sleep(0.5)
 
 
 def click(xs, ys):
-    mouse.position = (xs, ys)
+    mouse.position = (xs, ys + random.randint(1, 3))
     mouse.press(Button.left)
     mouse.release(Button.left)
-    time.sleep(0.0001)
 
 
 def choose_window_gui():
@@ -70,44 +41,16 @@ def choose_window_gui():
         return None
 
 
-def grab_screen(region, scale_factor=0.3):
-    screenshot = pyautogui.screenshot(region=region)
-    screenshot = np.array(screenshot)
-    screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
-    new_width = int(screenshot.shape[1] * scale_factor)
-    new_height = int(screenshot.shape[0] * scale_factor)
-    resized_screenshot = cv2.resize(screenshot, (new_width, new_height))
-    return resized_screenshot
+def find_image_on_screen(screenshot, template_path, threshold=0.7):
+    template = cv2.imread(template_path, cv2.COLOR_RGB2BGR)
+    screenshot_gray = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
 
-
-def find_template_on_screen(template, screenshot, step=0.7, scale_factor=0.3):
-    new_width = int(template.shape[1] * scale_factor)
-    new_height = int(template.shape[0] * scale_factor)
-    resized_template = cv2.resize(template, (new_width, new_height))
-    result = cv2.matchTemplate(screenshot, resized_template, cv2.TM_CCOEFF_NORMED)
+    result = cv2.matchTemplate(screenshot_gray, template, cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    if max_val >= step:
-        return (int(max_loc[0] / scale_factor), int(max_loc[1] / scale_factor))
+
+    if max_val >= threshold:
+        return max_loc
     return None
-
-
-def click_on_screen(position, template_width, template_height, region_left, region_top):
-    center_x = position[0] + template_width // 2
-    center_y = position[1] + template_height // 2
-    click(center_x + region_left, center_y + region_top)
-
-
-def process_template(template_data, screenshot, scale_factor, region_left, region_top):
-    template_name, template = template_data
-    if template is None:
-        print(f"Ошибка загрузки {template_name}")
-        return template_name, None
-    position = find_template_on_screen(template, screenshot, scale_factor=scale_factor)
-    if position:
-        template_height, template_width, _ = template.shape
-        click_on_screen(position, template_width, template_height, region_left, region_top)
-        return template_name, position
-    return template_name, None
 
 
 window_name = "TelegramDesktop"
@@ -126,15 +69,13 @@ telegram_window = gw.getWindowsWithTitle(window_name)[0]
 paused = True
 last_check_time = time.time()
 last_blue_check_time = time.time()
-last_pause_time = time.time()
 
-last_check_time_10s = time.time()
-last_check_time_5s = time.time()
+root = tk.Tk()
+root.withdraw()
 
 while True:
-    if keyboard.is_pressed('S') and time.time() - last_pause_time > 0.1:
+    if keyboard.is_pressed('S'):
         paused = not paused
-        last_pause_time = time.time()
         if paused:
             print('Пауза')
         else:
@@ -142,8 +83,14 @@ while True:
             print(f"Для паузы нажми 'S'")
         time.sleep(0.2)
 
+    if paused:
+        continue
+
     window_rect = (
-        telegram_window.left, telegram_window.top, telegram_window.width, telegram_window.height
+        telegram_window.left + 10,
+        telegram_window.top + 150,
+        telegram_window.width - 20,
+        telegram_window.height - 170
     )
 
     if telegram_window != []:
@@ -153,26 +100,39 @@ while True:
             telegram_window.minimize()
             telegram_window.restore()
 
-    if not paused:
-        screenshot = grab_screen(window_rect)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
-            current_time = time.time()
+    scrn = pyautogui.screenshot(region=(window_rect[0], window_rect[1], window_rect[2], window_rect[3]))
+    img = Image.frombytes('RGB', scrn.size, scrn.tobytes())
 
-            if current_time - last_check_time_10s >= 5:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.3, telegram_window.left, telegram_window.top) for template_data in star_templates_10s]
-                last_check_time_10s = current_time
-
-            # Удалить эти три строки, если не нужна заморозка и вверху скрипта удалить
-            if current_time - last_check_time_5s >= 1:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.3, telegram_window.left, telegram_window.top) for template_data in star_templates_5s]
-                last_check_time_5s = current_time
+    enhancer = ImageEnhance.Color(img)
+    img = enhancer.enhance(3)
 
 
-            futures += [executor.submit(process_template, template_data, screenshot, 0.3, telegram_window.left, telegram_window.top) for template_data in star_templates]
+    template_path = '6.png'
+    found_location = find_image_on_screen(img, template_path)
 
-            for future in concurrent.futures.as_completed(futures):
-                template_name, position = future.result()
+    if found_location:
+        screen_x, screen_y = found_location[0] + window_rect[0], found_location[1] + window_rect[1]
+        click(screen_x, screen_y)
+        time.sleep(0.002)
 
+    scrn = ImageTk.PhotoImage(image=img)
 
+    width, height = scrn.width(), scrn.height()
+
+    for x in range(0, width, 20):
+        for y in range(0, height, 20):
+            r, g, b = img.getpixel((x, y))
+            if (b in range(0, 125)) and (r in range(102, 220)) and (g in range(0, 255)):
+                screen_x = window_rect[0] + x
+                screen_y = window_rect[1] + y
+                click(screen_x, screen_y)
+                break
+    for xq in range(0, width, 20):
+        for yq in range(200, height, 20):
+            rq, gq, bq = img.getpixel((xq, yq))
+            if (rq in range(5, 125)) and (gq in range(100, 220)) and (bq in range(120, 255)):
+                screen_xq = window_rect[0] + xq
+                screen_yq = window_rect[1] + yq
+                click(screen_xq, screen_yq)
+                break
 print('Стоп')
