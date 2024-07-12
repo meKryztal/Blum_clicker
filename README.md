@@ -1,6 +1,6 @@
 #### Протестировано в Telegram Desctop и эмуляторе Android, в браузере у меня не открываетсья окно поэтому хз
 
-## MacOs не ворк, другая система захвата окна и нужно переписыватть код
+## MacOs не ворк, постоянные блокировки от системы, хз как пофиксить
 
 ### ГАЙД запуска через PyCharm на любых системах и решения ошибок внизу гайда
 https://telegra.ph/Avtoklikker-dlya-BLUM-GAJD-05-29
@@ -13,7 +13,7 @@ https://telegra.ph/Avtoklikker-dlya-BLUM-GAJD-05-29
 -Запустить install, скачаются все файлы и установятся модули.  
 -Запускать через run.  
 
-### Запуск через на Linux:
+### Запуск на Linux:
 -Ввести в терминал :  
 ```git clone https://github.com/meKryztal/Blum-clicker.git```  
 ```cd Blum-clicker```  
