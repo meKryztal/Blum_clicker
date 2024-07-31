@@ -6,7 +6,12 @@ import time
 from pynput.mouse import Button, Controller
 from pynput import keyboard
 
+
+
 mouse = Controller()
+
+
+click_counts = {'6': 2}  # Установить количество игр
 
 # Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
@@ -59,7 +64,7 @@ def click_on_screen(position, template_width, template_height, region_left, regi
     click(center_x + region_left, center_y + region_top + 4)
 
 
-def process_template(template_data, screenshot, scale_factor, region_left, region_top):
+def process_template(template_data, screenshot, scale_factor, region_left, region_top, click_counts):
     template_name, template = template_data
     if template is None:
         print(f"Ошибка загрузки {template_name}")
@@ -67,7 +72,12 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
     position = find_template_on_screen(template, screenshot, scale_factor=scale_factor)
     if position:
         template_height, template_width, _ = template.shape
-        click_on_screen(position, template_width, template_height, region_left, region_top)
+        if template_name == '6' and click_counts['6'] > 1:
+            click_on_screen(position, template_width, template_height, region_left, region_top)
+            click_counts['6'] -= 1
+
+        elif template_name != '6':
+            click_on_screen(position, template_width, template_height, region_left, region_top)
         return template_name, position
     return template_name, None
 
@@ -79,6 +89,7 @@ last_pause_time = time.time()
 
 last_check_time_10s = time.time()
 last_check_time_5s = time.time()
+end_time = None
 print(f"\nНажмите 'S' для старта.")
 
 def on_press(key):
@@ -102,24 +113,31 @@ listener.start()
 region = (0, 0, 386, 700)  # Задаем область в верхнем левом углу экрана
 
 while True:
-    if not paused:
+    if not paused and click_counts['6'] > 0:
         screenshot = grab_screen(region)
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             current_time = time.time()
 
             if current_time - last_check_time_10s >= 10:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1]) for template_data in star_templates_10s]
+                futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1], click_counts) for template_data in star_templates_10s]
                 last_check_time_10s = current_time
 
             # Удалить эти три строки, если не нужна заморозка и вверху скрипта удалить
             if current_time - last_check_time_5s >= 5:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1]) for template_data in star_templates_5s]
+                futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1], click_counts) for template_data in star_templates_5s]
                 last_check_time_5s = current_time
 
-            futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1]) for template_data in star_templates]
+            futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1], click_counts) for template_data in star_templates]
 
             for future in concurrent.futures.as_completed(futures):
                 template_name, position = future.result()
+    if click_counts['6'] == 1:
+        if not end_time:
+            end_time = time.time() + 40
+            print('Достигнуто заданное количество игр\r')
+
+    if end_time and time.time() >= end_time:
+        break
 
 print('Стоп')
