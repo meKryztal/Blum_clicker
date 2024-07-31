@@ -11,7 +11,7 @@ from pynput import keyboard
 mouse = Controller()
 
 
-click_counts = {'6': 2}  # Установить количество игр
+click_counts = {'6': 2}  # Установить количество игр, дефолт 2 игры
 
 # Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
