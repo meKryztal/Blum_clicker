@@ -1,3 +1,5 @@
+# Все мои коды в открытом доступе, любая продажа запрещена! <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a>
+
 #### Протестировано в Telegram Desctop и эмуляторе Android, в браузере у меня не открываетсья окно поэтому хз
 
 ## MacOs не ворк, постоянные блокировки от системы, хз как пофиксить
