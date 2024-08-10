@@ -11,8 +11,6 @@ from tkinter import simpledialog
 
 mouse = Controller()
 
-click_counts = {'6': 2}  # Установить количество игр, дефолт 2 игры
-
 
 def get_window(window):
     windows = pyautogui.getWindowsWithTitle(window)
@@ -24,7 +22,7 @@ def get_window(window):
         region_height = window.height
         return region_left, region_top, region_width, region_height
     else:
-        raise Exception(f"Окно '{window}' не найдено.")
+        raise Exception(f"{Fore.LIGHTRED_EX}Окно '{window}' не найдено.")
 
 star_templates_10s = [
     ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
@@ -54,7 +52,7 @@ def choose_window_gui():
     windows = gw.getAllTitles()
     if not windows:
         return None
-    choice = simpledialog.askstring("Выбор окна Telegram", "Введите номер окна:\n" + "\n".join(
+    choice = simpledialog.askstring(f"{Fore.LIGHTWHITE_EX}Выбор окна Telegram", "Введите номер окна:\n" + "\n".join(
         f"{i}: {window}" for i, window in enumerate(windows)))
     if choice is None or not choice.isdigit():
         return None
@@ -91,7 +89,7 @@ def click_on_screen(position, template_width, template_height, region_left, regi
 def process_template(template_data, screenshot, scale_factor, region_left, region_top, click_counts):
     template_name, template = template_data
     if template is None:
-        print(f"Ошибка загрузки {template_name}")
+        print(f"{Fore.LIGHTRED_EX}Ошибка загрузки {template_name}")
         return template_name, None
     position = find_template_on_screen(template, screenshot, scale_factor=scale_factor)
     if position:
@@ -105,18 +103,22 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
         return template_name, position
     return template_name, None
 
-# Main script
 window_name = "TelegramDesktop"
 check = gw.getWindowsWithTitle(window_name)
+encoded = b'LS0tLS0tLS0tLdCa0J7QlCDQndCQ0KXQntCU0JjQotCh0K8g0JIg0J7QotCa0KDQq9Ci0J7QnCDQlNCe0KHQotCj0J/QlSwg0JvQrtCR0JDQryDQn9Cg0J7QlNCQ0JbQkCAtINCX0JDQn9Cg0JXQqdCV0J3QkCEhIS0tLS0tLS0tLS0KLS0tLS0tLS0tLS0tLS0tLS0t0J7QoNCY0JPQmNCd0JDQm9Cs0J3Qq9CZINCa0J7QlDogaHR0cHM6Ly9naXRodWIuY29tL21lS3J5enRhbC9CbHVtLWNsaWNrZXIgLS0tLS0tLS0tLS0tLS0tLS0t'
+print(f"{Fore.LIGHTYELLOW_EX}{base64.b64decode(encoded).decode('utf-8')}")
 
 if not check:
-    print(f"\nОкно {window_name} не найдено!\nПожалуйста, выберите другое окно.")
+    print(f"{Fore.LIGHTRED_EX}\nОкно {window_name} не найдено!\nПожалуйста, выберите другое окно.")
     window_name = choose_window_gui()
 
 if not window_name or not gw.getWindowsWithTitle(window_name):
-    print("\nНе удалось найти указанное окно!\nЗапустите Telegram, после чего перезапустите бота!")
+    print(f"{Fore.LIGHTRED_EX}\nНе удалось найти указанное окно!\nЗапустите Telegram, после чего перезапустите бота!")
 else:
-    print(f"\nОкно {window_name} найдено\nНажмите 'S' для старта.")
+    print(f"{Fore.LIGHTBLUE_EX}\nОкно {window_name} найдено\n")
+    num = input(f"{Fore.LIGHTYELLOW_EX}Укажите количество игр, что нужно отыграть:\n")
+    click_counts = {'6': int(num)}
+    print(f"{Fore.LIGHTBLUE_EX}Нажмите 'S' для старта.")
 
 telegram_window = gw.getWindowsWithTitle(window_name)[0]
 paused = True
@@ -132,10 +134,10 @@ while True:
         paused = not paused
         last_pause_time = time.time()
         if paused:
-            print('Пауза')
+            print(f'{Fore.LIGHTBLUE_EX}Пауза')
         else:
-            print('Работаю')
-            print(f"Для паузы нажми 'S'")
+            print(f'{Fore.LIGHTBLUE_EX}Работаю')
+            print(f"{Fore.LIGHTBLUE_EX}Для паузы нажми 'S'")
         time.sleep(0.2)
 
     window_rect = (
@@ -172,9 +174,9 @@ while True:
     if click_counts['6'] == 1:
         if not end_time:
             end_time = time.time() + 40
-            print('Достигнуто заданное количество игр')
+            print(f'{Fore.LIGHTWHITE_EX}Достигнуто заданное количество игр')
 
     if end_time and time.time() >= end_time:
         break
 
-print('Стоп')
+print(f'{Fore.LIGHTRED_EX}Стоп')
