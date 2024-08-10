@@ -5,13 +5,14 @@ import concurrent.futures
 import time
 from pynput.mouse import Button, Controller
 from pynput import keyboard
-
+import base64
+from colorama import Fore
 
 
 mouse = Controller()
 
 
-click_counts = {'6': 2}  # Установить количество игр, дефолт 2 игры
+
 
 # Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
@@ -67,7 +68,7 @@ def click_on_screen(position, template_width, template_height, region_left, regi
 def process_template(template_data, screenshot, scale_factor, region_left, region_top, click_counts):
     template_name, template = template_data
     if template is None:
-        print(f"Ошибка загрузки {template_name}")
+        print(f"{Fore.LIGHTRED_EX}Ошибка загрузки {template_name}")
         return template_name, None
     position = find_template_on_screen(template, screenshot, scale_factor=scale_factor)
     if position:
@@ -81,7 +82,8 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
         return template_name, position
     return template_name, None
 
-
+encoded = b'LS0tLS0tLS0tLdCa0J7QlCDQndCQ0KXQntCU0JjQotCh0K8g0JIg0J7QotCa0KDQq9Ci0J7QnCDQlNCe0KHQotCj0J/QlSwg0JvQrtCR0JDQryDQn9Cg0J7QlNCQ0JbQkCAtINCX0JDQn9Cg0JXQqdCV0J3QkCEhIS0tLS0tLS0tLS0KLS0tLS0tLS0tLS0tLS0tLS0t0J7QoNCY0JPQmNCd0JDQm9Cs0J3Qq9CZINCa0J7QlDogaHR0cHM6Ly9naXRodWIuY29tL21lS3J5enRhbC9CbHVtLWNsaWNrZXIgLS0tLS0tLS0tLS0tLS0tLS0t'
+print(f"{Fore.LIGHTYELLOW_EX}{base64.b64decode(encoded).decode('utf-8')}")
 paused = True
 last_check_time = time.time()
 last_blue_check_time = time.time()
@@ -90,7 +92,7 @@ last_pause_time = time.time()
 last_check_time_10s = time.time()
 last_check_time_5s = time.time()
 end_time = None
-print(f"\nНажмите 'S' для старта.")
+print(f"{Fore.LIGHTBLUE_EX}Нажмите 'S' для старта.")
 
 def on_press(key):
     global paused, last_pause_time
@@ -98,11 +100,11 @@ def on_press(key):
         if key.char == 's' and time.time() - last_pause_time > 0.1:
             paused = not paused
             last_pause_time = time.time()
-            if paused:
-                print('Пауза')
-            else:
-                print('Работаю')
-                print(f"Для паузы нажми 'S'")
+        if paused:
+            print(f'{Fore.LIGHTBLUE_EX}Пауза')
+        else:
+            print(f'{Fore.LIGHTBLUE_EX}Работаю')
+            print(f"{Fore.LIGHTBLUE_EX}Для паузы нажми 'S'")
             time.sleep(0.2)
     except AttributeError:
         pass
@@ -135,9 +137,9 @@ while True:
     if click_counts['6'] == 1:
         if not end_time:
             end_time = time.time() + 40
-            print('Достигнуто заданное количество игр\r')
+            print(f'{Fore.LIGHTWHITE_EX}Достигнуто заданное количество игр')
 
     if end_time and time.time() >= end_time:
         break
 
-print('Стоп')
+print(f'{Fore.LIGHTRED_EX}Стоп')
