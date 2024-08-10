@@ -8,8 +8,7 @@ from pynput.mouse import Button, Controller
 import pygetwindow as gw
 import tkinter as tk
 from tkinter import simpledialog
-import base64
-from colorama import Fore
+
 mouse = Controller()
 
 
