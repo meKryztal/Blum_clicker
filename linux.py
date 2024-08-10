@@ -5,8 +5,7 @@ import concurrent.futures
 import time
 from pynput.mouse import Button, Controller
 from pynput import keyboard
-import base64
-from colorama import Fore
+
 
 
 mouse = Controller()
