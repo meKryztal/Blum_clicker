@@ -7,7 +7,6 @@ from pynput.mouse import Button, Controller
 from pynput import keyboard
 
 
-
 mouse = Controller()
 
 
@@ -91,7 +90,9 @@ last_pause_time = time.time()
 last_check_time_10s = time.time()
 last_check_time_5s = time.time()
 end_time = None
-print(f"{Fore.LIGHTBLUE_EX}Нажмите 'S' для старта.")
+num = input(f"{Fore.LIGHTYELLOW_EX}\nУкажите количество игр, что нужно отыграть:\n")
+click_counts = {'6': int(num)}
+print(f"{Fore.LIGHTBLUE_EX}\nНажмите 'S' для старта.")
 
 def on_press(key):
     global paused, last_pause_time
