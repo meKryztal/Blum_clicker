@@ -6,3 +6,4 @@ pynput
 pygetwindow
 tk
 pillow
+colorama
