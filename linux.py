@@ -1,3 +1,5 @@
+from colorama import Fore
+import base64
 import pyautogui
 import cv2
 import numpy as np
