@@ -26,7 +26,7 @@ https://telegra.ph/Avtoklikker-dlya-BLUM-GAJD-05-29
 -Запускать потом ```python3 linux.py```  
 
 ### Запуск на MacOS:
--установить python
+-Установить python.  
 -Скачать на рабочий стол скрипт
 -Ввести в терминал :  
 ```cd Desktop/Blum-clicker```  
