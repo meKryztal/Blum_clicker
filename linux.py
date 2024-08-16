@@ -81,7 +81,7 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
     return template_name, None
 
 encoded = b'LS0tLS0tLS0tLdCa0J7QlCDQndCQ0KXQntCU0JjQotCh0K8g0JIg0J7QotCa0KDQq9Ci0J7QnCDQlNCe0KHQotCj0J/QlSwg0JvQrtCR0JDQryDQn9Cg0J7QlNCQ0JbQkCAtINCX0JDQn9Cg0JXQqdCV0J3QkCEhIS0tLS0tLS0tLS0KLS0tLS0tLS0tLS0tLS0tLS0t0J7QoNCY0JPQmNCd0JDQm9Cs0J3Qq9CZINCa0J7QlDogaHR0cHM6Ly9naXRodWIuY29tL21lS3J5enRhbC9CbHVtLWNsaWNrZXIgLS0tLS0tLS0tLS0tLS0tLS0t'
-print(f"{Fore.LIGHTYELLOW_EX}{base64.b64decode(encoded).decode('utf-8')}")
+print(f"\033[1m{Fore.LIGHTRED_EX}{base64.b64decode(encoded).decode('utf-8')}\033[0m")
 paused = True
 last_check_time = time.time()
 last_blue_check_time = time.time()
@@ -90,7 +90,7 @@ last_pause_time = time.time()
 last_check_time_10s = time.time()
 last_check_time_5s = time.time()
 end_time = None
-num = input(f"{Fore.LIGHTYELLOW_EX}\nУкажите количество игр, что нужно отыграть:\n")
+num = input(f"{Fore.LIGHTBLUE_EX}\nУкажите количество игр, что нужно отыграть:\n")
 click_counts = {'6': int(num)}
 print(f"{Fore.LIGHTBLUE_EX}\nНажмите 'S' для старта.")
 
@@ -137,7 +137,7 @@ while True:
     if click_counts['6'] == 1:
         if not end_time:
             end_time = time.time() + 40
-            print(f'{Fore.LIGHTWHITE_EX}Достигнуто заданное количество игр')
+            print(f'{Fore.LIGHTRED_EX}Достигнуто заданное количество игр')
 
     if end_time and time.time() >= end_time:
         break
