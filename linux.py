@@ -14,11 +14,18 @@ mouse = Controller()
 
 
 
-# Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
+star_templates_10s = [
+    ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
+    ('7', cv2.imread('7.png', cv2.IMREAD_COLOR)),
+
+]
+
+# Удалить эти строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
     ('4', cv2.imread('4.png', cv2.IMREAD_COLOR)),
     ('5', cv2.imread('5.png', cv2.IMREAD_COLOR)),
 ]
+###############################################################
 
 star_templates = [
     ('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),
@@ -26,8 +33,8 @@ star_templates = [
     ('3', cv2.imread('3.png', cv2.IMREAD_COLOR)),
 ]
 
-star_templates_10s = [
-    ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
+star_templates_p = [
+    ('8', cv2.imread('8.png', cv2.IMREAD_COLOR))
 ]
 
 
@@ -77,6 +84,17 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             click_on_screen(position, template_width, template_height, region_left, region_top)
             click_counts['6'] -= 1
 
+        elif template_name == '7' and click_counts['6'] > 1:
+
+            mouse.scroll(0, 2)
+            mouse.scroll(0, -200)
+            time.sleep(1)
+
+            position_8 = find_template_on_screen(star_templates_p[-1][1], screenshot, scale_factor=scale_factor)
+            if position_8:
+                click_on_screen(position_8, template_width, template_height, region_left, region_top)
+                click_counts['6'] -= 1
+                
         elif template_name != '6':
             click_on_screen(position, template_width, template_height, region_left, region_top)
         return template_name, position
