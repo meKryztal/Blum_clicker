@@ -28,14 +28,15 @@ def get_window(window):
 star_templates_10s = [
     ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
     ('7', cv2.imread('7.png', cv2.IMREAD_COLOR)),
-    ('8', cv2.imread('8.png', cv2.IMREAD_COLOR))
 ]
 
-# Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
+# Удалить эти строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
     ('4', cv2.imread('4.png', cv2.IMREAD_COLOR)),
     ('5', cv2.imread('5.png', cv2.IMREAD_COLOR)),
 ]
+########################################################
+
 
 star_templates = [
     ('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),
@@ -184,7 +185,8 @@ while True:
             if current_time - last_check_time_5s >= 1:
                 futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates_5s]
                 last_check_time_5s = current_time
-
+            ############################################################################################################################################
+            
             futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates]
 
             for future in concurrent.futures.as_completed(futures):
