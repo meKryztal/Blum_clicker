@@ -149,7 +149,8 @@ while True:
             if current_time - last_check_time_5s >= 5:
                 futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1], click_counts) for template_data in star_templates_5s]
                 last_check_time_5s = current_time
-
+            ###############################################################################################################################
+            
             futures += [executor.submit(process_template, template_data, screenshot, 0.5, region[0], region[1], click_counts) for template_data in star_templates]
 
             for future in concurrent.futures.as_completed(futures):
