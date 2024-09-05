@@ -107,10 +107,13 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             click_counts['6'] -= 1
             
         elif template_name == '7' and click_counts['6'] > 1:
-
+            center_x = telegram_window.left + telegram_window.width // 2
+            center_y = telegram_window.top + telegram_window.height // 2
+            mouse.position = (center_x, center_y)
+            time.sleep(0.3)
             mouse.scroll(0, 2)
             mouse.scroll(0, -200)
-            time.sleep(1)
+            time.sleep(0.3)
 
             position_8 = find_template_on_screen(star_templates_p[-1][1], screenshot, scale_factor=scale_factor)
             if position_8:
