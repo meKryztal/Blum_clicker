@@ -1,6 +1,7 @@
 # Все мои коды в открытом доступе, любая продажа запрещена! <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a>
 
 #### Протестировано в Telegram Desktop и эмуляторе Android, в браузере у меня не открываетсья окно поэтому хз
+##### Если у вас не нажимается в каком-то месте, то делайте скрин всего экрана и вырегайте картинки по подобию как здесь лежат 
 
 
 ### ГАЙД запуска через PyCharm на любых системах и решения ошибок внизу гайда
