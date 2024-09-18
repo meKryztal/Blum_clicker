@@ -89,7 +89,7 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             center_y = telegram_window.top + telegram_window.height // 2
             mouse.position = (center_x, center_y)
             time.sleep(0.3)
-            mouse.scroll(0, 2)
+            #mouse.scroll(0, 2)
             mouse.scroll(0, -200)
             time.sleep(0.3)
 
