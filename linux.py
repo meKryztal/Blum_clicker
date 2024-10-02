@@ -97,7 +97,10 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             if position_8:
                 click_on_screen(position_8, template_width, template_height, region_left, region_top)
                 click_counts['6'] -= 1
-                
+
+        elif template_name == '9':
+            click_on_screen(position, template_width, template_height, region_left, region_top)
+            
         elif template_name != '6':
             click_on_screen(position, template_width, template_height, region_left, region_top)
         return template_name, position
