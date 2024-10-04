@@ -1,3 +1,8 @@
+<div align="right">
+  <a href="https://github.com/meKryztal">
+    <img src="https://github.com/user-attachments/assets/c381e8c0-e56a-4134-b333-4ec0dffab514" alt="donate" width="150">
+  </a>
+</div>
 # Все мои коды в открытом доступе, любая продажа запрещена! <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a>
 
 #### Протестировано в Telegram Desktop и эмуляторе Android, в браузере у меня не открываетсья окно поэтому хз
