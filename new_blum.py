@@ -12,37 +12,25 @@ import base64
 from colorama import Fore
 mouse = Controller()
 
-
-def get_window(window):
-    windows = pyautogui.getWindowsWithTitle(window)
-    if windows:
-        window = windows[0]
-        region_left = window.left
-        region_top = window.top
-        region_width = window.width
-        region_height = window.height
-        return region_left, region_top, region_width, region_height
-    else:
-        raise Exception(f"{Fore.LIGHTRED_EX}Окно '{window}' не найдено.")
+WIND = 0.2 # Сдвиг окна
 
 star_templates_10s = [
     ('6', cv2.imread('6.png', cv2.IMREAD_COLOR)),
     ('7', cv2.imread('7.png', cv2.IMREAD_COLOR)),
+    ('9', cv2.imread('9.png', cv2.IMREAD_COLOR))
 ]
 
-# Удалить эти строки, если не нужна заморозка и внизу скрипта удалить
+# Удалить эти три строки, если не нужна заморозка и внизу скрипта удалить
 star_templates_5s = [
     ('4', cv2.imread('4.png', cv2.IMREAD_COLOR)),
     ('5', cv2.imread('5.png', cv2.IMREAD_COLOR)),
 ]
-########################################################
-
 
 star_templates = [
     ('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),
     ('2', cv2.imread('2.png', cv2.IMREAD_COLOR)),
     ('3', cv2.imread('3.png', cv2.IMREAD_COLOR)),
-    ('10', cv2.imread('10.png', cv2.IMREAD_COLOR)),
+    #('10', cv2.imread('10.png', cv2.IMREAD_COLOR)),
     #('11', cv2.imread('11.png', cv2.IMREAD_COLOR)),
 ]
 
@@ -107,13 +95,13 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
         if template_name == '6' and click_counts['6'] > 1:
             click_on_screen(position, template_width, template_height, region_left, region_top)
             click_counts['6'] -= 1
-            
+
         elif template_name == '7' and click_counts['6'] > 1:
             center_x = telegram_window.left + telegram_window.width // 2
             center_y = telegram_window.top + telegram_window.height // 2
             mouse.position = (center_x, center_y)
             time.sleep(0.3)
-            #mouse.scroll(0, 2)
+            mouse.scroll(0, 2)
             mouse.scroll(0, -200)
             time.sleep(0.3)
 
@@ -121,8 +109,9 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             if position_8:
                 click_on_screen(position_8, template_width, template_height, region_left, region_top)
                 click_counts['6'] -= 1
+
         elif template_name == '9':
-            click_on_screen(position, template_width, template_height, region_left, region_top)        
+            click_on_screen(position, template_width, template_height, region_left, region_top)
 
         elif template_name != '6':
             click_on_screen(position, template_width, template_height, region_left, region_top)
@@ -167,9 +156,17 @@ while True:
         time.sleep(0.2)
 
     window_rect = (
-        telegram_window.left, telegram_window.top, telegram_window.width, telegram_window.height
+        telegram_window.left+int(telegram_window.width*0.05),
+        telegram_window.top+int(telegram_window.height*WIND),
+        telegram_window.width-int(telegram_window.width*0.12),
+        int(telegram_window.height*(1-0.08-WIND))
     )
 
+
+    region = window_rect
+    screenshot = pyautogui.screenshot(region=region)
+    screenshot.save("screenshot.png")
+    time.sleep(10)
     if telegram_window != []:
         try:
             telegram_window.activate()
@@ -191,8 +188,7 @@ while True:
             if current_time - last_check_time_5s >= 1:
                 futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates_5s]
                 last_check_time_5s = current_time
-            ############################################################################################################################################
-            
+
             futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates]
 
             for future in concurrent.futures.as_completed(futures):
