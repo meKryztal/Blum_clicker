@@ -97,8 +97,8 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
             click_counts['6'] -= 1
 
         elif template_name == '7' and click_counts['6'] > 1:
-            center_x = telegram_window.left + telegram_window.width // 2
-            center_y = telegram_window.top + telegram_window.height // 2
+            center_x = (telegram_window.left+int(telegram_window.width*0.05)) + (telegram_window.width-int(telegram_window.width*0.12)) // 2
+            center_y = (telegram_window.top+int(telegram_window.height*WIND)) + (int(telegram_window.height*(1-WIND))) // 2
             mouse.position = (center_x, center_y)
             time.sleep(0.3)
             mouse.scroll(0, 2)
@@ -159,7 +159,7 @@ while True:
         telegram_window.left+int(telegram_window.width*0.05),
         telegram_window.top+int(telegram_window.height*WIND),
         telegram_window.width-int(telegram_window.width*0.12),
-        int(telegram_window.height*(1-0.08-WIND))
+        int(telegram_window.height*(1-WIND))
     )
 
 
@@ -177,15 +177,15 @@ while True:
             current_time = time.time()
 
             if current_time - last_check_time_10s >= 5:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates_10s]
+                futures += [executor.submit(process_template, template_data, screenshot, 0.5, (telegram_window.left+int(telegram_window.width*0.05)), (telegram_window.top+int(telegram_window.height*WIND)), click_counts) for template_data in star_templates_10s]
                 last_check_time_10s = current_time
 
             # Удалить эти три строки, если не нужна заморозка и вверху скрипта удалить
             if current_time - last_check_time_5s >= 1:
-                futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates_5s]
+                futures += [executor.submit(process_template, template_data, screenshot, 0.5, (telegram_window.left+int(telegram_window.width*0.05)), (telegram_window.top+int(telegram_window.height*WIND)), click_counts) for template_data in star_templates_5s]
                 last_check_time_5s = current_time
 
-            futures += [executor.submit(process_template, template_data, screenshot, 0.5, telegram_window.left, telegram_window.top, click_counts) for template_data in star_templates]
+            futures += [executor.submit(process_template, template_data, screenshot, 0.5, (telegram_window.left+int(telegram_window.width*0.05)), (telegram_window.top+int(telegram_window.height*WIND)), click_counts) for template_data in star_templates]
 
             for future in concurrent.futures.as_completed(futures):
                 template_name, position = future.result()
