@@ -163,10 +163,6 @@ while True:
     )
 
 
-    region = window_rect
-    screenshot = pyautogui.screenshot(region=region)
-    screenshot.save("screenshot.png")
-    time.sleep(10)
     if telegram_window != []:
         try:
             telegram_window.activate()
