@@ -98,7 +98,7 @@ def process_template(template_data, screenshot, scale_factor, region_left, regio
 
         elif template_name == '7' and click_counts['6'] > 1:
             center_x = (telegram_window.left+int(telegram_window.width*0.05)) + (telegram_window.width-int(telegram_window.width*0.12)) // 2
-            center_y = (telegram_window.top+int(telegram_window.height*WIND)) + (int(telegram_window.height*(1-WIND))) // 2
+            center_y = (telegram_window.top+int(telegram_window.height*WIND)) + (int(telegram_window.height*(0.92-WIND))) // 2
             mouse.position = (center_x, center_y)
             time.sleep(0.3)
             mouse.scroll(0, 2)
@@ -159,7 +159,7 @@ while True:
         telegram_window.left+int(telegram_window.width*0.05),
         telegram_window.top+int(telegram_window.height*WIND),
         telegram_window.width-int(telegram_window.width*0.12),
-        int(telegram_window.height*(1-WIND))
+        int(telegram_window.height*(0.92-WIND))
     )
 
 
