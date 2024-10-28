@@ -27,11 +27,17 @@ star_templates_5s = [
 ]
 
 star_templates = [
-    ('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),
-    ('2', cv2.imread('2.png', cv2.IMREAD_COLOR)),
-    ('3', cv2.imread('3.png', cv2.IMREAD_COLOR)),
-    #('10', cv2.imread('10.png', cv2.IMREAD_COLOR)),
+    #('1', cv2.imread('1.png', cv2.IMREAD_COLOR)),  # фарм цветов
+    #('2', cv2.imread('2.png', cv2.IMREAD_COLOR)),
+    #('3', cv2.imread('3.png', cv2.IMREAD_COLOR)),
+    
+    #('10', cv2.imread('10.png', cv2.IMREAD_COLOR)),  # фарм собак
     #('11', cv2.imread('11.png', cv2.IMREAD_COLOR)),
+    
+    ('12', cv2.imread('12.png', cv2.IMREAD_COLOR)),  # фарм хеллоуин
+    ('13', cv2.imread('13.png', cv2.IMREAD_COLOR)),
+    ('14', cv2.imread('14.png', cv2.IMREAD_COLOR)),
+    ('15', cv2.imread('15.png', cv2.IMREAD_COLOR)),
 ]
 
 star_templates_p = [
